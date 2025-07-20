@@ -6,62 +6,62 @@ Spotfire dashboard that integrates COVID-19 data, US Census data, and Weather da
 ________________________________________
 **Data Sources**
 1.	COVID-19 Data:
-o	Metrics: Daily cases, deaths, vaccination rates.
-o	Source: CDC COVID Data Tracker.
-o	Granularity: State and county level (2020–2023).
+  o	Metrics: Daily cases, deaths, vaccination rates.
+  o	Source: CDC COVID Data Tracker.
+  o	Granularity: State and county level (2020–2023).
 2.	US Census Data:
-o	Metrics: Population, median income, unemployment rates, age distribution.
-o	Source: US Census Bureau.
-o	Granularity: State and county level (latest estimates).
+  o	Metrics: Population, median income, unemployment rates, age distribution.
+  o	Source: US Census Bureau.
+  o	Granularity: State and county level (latest estimates).
 3.	Weather Data:
-o	Metrics: Temperature, precipitation, humidity, extreme weather events.
-o	Source: Open Weather.
-o	Granularity: State level, aggregated monthly (2020–2023).
+  o	Metrics: Temperature, precipitation, humidity, extreme weather events.
+  o	Source: Open Weather.
+  o	Granularity: State level, aggregated monthly (2020–2023).
 ________________________________________
 **Data Ingestion**
 Tools Used
 •	Spotfire Data Connector(ODATA):
-o	Configured to load COVID-19 data as ODATA.
+  o	Configured to load COVID-19 data as ODATA.
 •	Python Scripts via Spotfire Data Functions: -Configured to load US Census and Weather data directly from API into Spotfire Data Function and convert into data table .
-o	Automated data loading and initial preprocessing.
+  o	Automated data loading and initial preprocessing.
 Process
 1.	COVID-19 Data:
-o	Imported Weekly deaths from 2020 to 2023 into Spotfire.
+  o	Imported Weekly deaths from 2020 to 2023 into Spotfire.
 2.	US Census Data:
-o	Imported data via API containing demographic and economic data.
-o	Mapped State and Year as the primary key for joining with other datasets.
+  o	Imported data via API containing demographic and economic data.
+  o	Mapped State and Year as the primary key for joining with other datasets.
 3.	Weather Data:
-o	Imported single day weather data aggregated by state.
+  o	Imported single day weather data aggregated by state.
 ________________________________________
 **Data Transformation**
 
 A. **Cleaning**
 1.	Missing Values:
-o	COVID-19: Filled missing Vaccination Rate with state-level averages.
-o	Weather: Interpolated missing values for Humidity and Precipitation using monthly averages.
+  o	COVID-19: Filled missing Vaccination Rate with state-level averages.
+  o	Weather: Interpolated missing values for Humidity and Precipitation using monthly averages.
 2.	Standardization:
-o	Dates converted to the format YYYY.
-o	State names standardized to title case (e.g., New York).
+  o	Dates converted to the format YYYY.
+  o	State names standardized to title case (e.g., New York).
 3.	Filtering:
-o	Removed non-state territories (e.g., Guam, Puerto Rico, New York City) to focus on US states.
+  o	Removed non-state territories (e.g., Guam, Puerto Rico, New York City) to focus on US states.
 
 B. **Joining**
 •	Merged datasets using:
 
-o	Primary Keys: State and Date.
-o	Join Types:
-	Left Inner Join for COVID-19 and Weather data.
-	Left Join for Census data with the merged COVID-19/Weather dataset.
+  o	Primary Keys: State and Date.
+  o	Join Types:
+  	Left Inner Join for COVID-19 and Weather data.
+  	Left Join for Census data with the merged COVID-19/Weather dataset.
 ________________________________________
 **C. Feature Engineering**
 1.	Derived Metrics:
-o	Covid Deaths Per Capita = Covid Deaths ÷ Population.
-o	Deaths Per Capita = Deaths ÷ Population.
-o	Weather-COVID Interaction: Humidity * Avg Temperature.
+  o	Covid Deaths Per Capita = Covid Deaths ÷ Population.
+  o	Deaths Per Capita = Deaths ÷ Population.
+  o	Weather-COVID Interaction: Humidity * Avg Temperature.
 2.	Categorical Variables:
-o	Grouped income into Low, Medium, and High categories using percentiles.
+  o	Grouped income into Low, Medium, and High categories using percentiles.
 3.	Time-Based Aggregations:
-o	Rolled daily COVID-19 data into monthly averages for consistency with Weather data.
+  o	Rolled daily COVID-19 data into monthly averages for consistency with Weather data.
 ________________________________________
 **D. Normalization**
 •	Applied z-score normalization to numeric variables (e.g., population, case rates) to ensure uniform scaling across features.
@@ -69,20 +69,20 @@ ________________________________________
 **Approach**
 Data Integration and Preprocessing
 1.	Data Cleaning:
-o	Handled missing values by filling them with mean or median where applicable.
-o	Standardized formats across datasets (e.g., date and state names).
+  o	Handled missing values by filling them with mean or median where applicable.
+  o	Standardized formats across datasets (e.g., date and state names).
 2.	Data Joining:
-o	Merged datasets on common attributes like State and Date.
+  o	Merged datasets on common attributes like State and Date.
 3.	Derived Metrics:
-o	Calculated per-capita COVID-19 deaths using census population data.
-o	Derived average monthly temperature and precipitation from weather data.
+  o	Calculated per-capita COVID-19 deaths using census population data.
+  o	Derived average monthly temperature and precipitation from weather data.
 ________________________________________
 **Data Functions in Use:**
 Python Scripts in used as Data Function
-•	Open Weather Data: This python script is used to get weather data from Open Weather API. The variables are state,capital,temperature, feels like,min temperature, max temperature,pressure,humidity,visibility,weather description,cloudiness,wind speed,wind direction,latitude,longitude. The funcion parses the data into data frame which is passed as output parameter into table.
-•	US Census Data Function: This python script is used to get US Census data from US Census API. The variables are state,total population,median household income,gini index (income inequality),median gross rent,median home value,median age,unemployment rate,white population,black or african american population,hispanic or latino population.The funcion parses the data into data frame which is passed as output parameter into table.
-•	Random Forest Algorithm: This python script contains Random Forest Algorithm to predict covid case rate based on population, Household Income, Temperature, Humidity.
-•	K-Means Clustering ML Algorithm: This python script is contains K-Means Clustering algorithm which is cluster data using variables such as population,age,unemployment rate,GDP,home value,home rent and median income.
+  •	Open Weather Data: This python script is used to get weather data from Open Weather API. The variables are state,capital,temperature, feels like,min temperature, max temperature,pressure,humidity,visibility,weather description,cloudiness,wind speed,wind direction,latitude,longitude. The funcion parses the data into data frame which is passed as output parameter into table.
+  •	US Census Data Function: This python script is used to get US Census data from US Census API. The variables are state,total population,median household income,gini index (income inequality),median gross rent,median home value,median age,unemployment rate,white population,black or african american population,hispanic or latino population.The funcion parses the data into data frame which is passed as output parameter into table.
+  •	Random Forest Algorithm: This python script contains Random Forest Algorithm to predict covid case rate based on population, Household Income, Temperature, Humidity.
+  •	K-Means Clustering ML Algorithm: This python script is contains K-Means Clustering algorithm which is cluster data using variables such as population,age,unemployment rate,GDP,home value,home rent and median income.
 ________________________________________
 **Dashboard Architecture/Features**
 1. Overview Page
