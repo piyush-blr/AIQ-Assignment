@@ -1,0 +1,19 @@
+import pandas as pd
+from sklearn.cluster import KMeans
+
+input_copy = input_df
+
+data = input_df.to_numpy()
+    
+km = KMeans(
+        n_clusters = n_clusters, 
+        init = init,
+        n_init = n_init, 
+        max_iter = max_iter, 
+        tol= tol, 
+        random_state = random_state
+        )
+		
+input_copy['labels'] = km.fit_predict(data)
+
+final_df = input_copy
